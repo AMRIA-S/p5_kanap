@@ -1,3 +1,4 @@
+//liste des canapés avec variable Array products
 const products = [
   {
     "colors": ["Blue", "White", "Black"],

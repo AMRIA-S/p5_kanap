@@ -17,6 +17,7 @@ exports.getAllProducts = (req, res, next) => {
   );
 };
 
+
 exports.getOneProduct = (req, res, next) => {
   Product.findById(req.params.id).then(
     (product) => {
@@ -33,7 +34,7 @@ exports.getOneProduct = (req, res, next) => {
   )
 };
 
-/**
+/**FORMULAIRE valide commande ??
  *
  * Expects request to contain:
  * contact: {
@@ -56,6 +57,9 @@ exports.orderProducts = (req, res, next) => {
       !req.body.products) {
     return res.status(400).send(new Error('Bad request!'));
   }
+
+
+  //verif id et affiche le resulat sinon "product not found : productID"
   let queries = [];
   for (let productId of req.body.products) {
     const queryPromise = new Promise((resolve, reject) => {
