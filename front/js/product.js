@@ -26,14 +26,65 @@ res.json().then((kanap) => {
 );
 
 
-// lors du clic sur le bouton "Ajouter au Panuer"
+// lors du clic sur le bouton "Ajouter au Panier"
+document.getElementById("addToCart").addEventListener("click", function(event) {
 
-// 1. on recupere la quantité et la couleur choisie
+    // 1. on recupère la quantité et la couleur choisie
+   // var quantity = document.querySelector('#quantity');
+    //console.log(quantity);
 
-// 2. on verifie que la quantité est comprise entre 1 et 100
-// 2 bis. on verifie qu'une couleur a bien été choisie
+    //var color = document.getElementById('colors');
+    var colors = document.querySelector('select');
 
-// si quantité non comprise entre 0 et 100 OU que couleur non choisi alors on affiche un message d'erreur dans une alert
+    
+    
+
+
+
+/*   function verifQt(quantity) {   
+        // 2. on verifie que la quantité est comprise entre 1 et 100
+
+        if (quantity.value >= 1 && quantity <= 100) {
+            
+            console.log("Veuillez choisir un nombre compris entre 1 et 100");
+            return false;
+            
+            
+        }else {
+            console.log("quantitée ok");
+            return true;
+        }
+   };verifQt(quantity);  */
+
+
+  // 2 bis. on verifie qu'une couleur a bien été choisie
+    function verifColor(colors)  {
+
+        if (colors.value ==="") {
+            event.preventDefault;
+            console.log("Veuillez choisir une couleur");
+            return false;
+        }else {
+            console.log("couleur selectionnée");
+            return true
+        }
+    };verifColor(colors);
+
+
+
+
+//si quantité non comprise entre 0 et 100 OU que couleur non choisi alors on affiche un message d'erreur dans une alert
+/*function verifColorsQuantite(quantity, color) {
+    if (quantity >= 1 && quantity <= 100 || color !=="--SVP, choisissez une couleur --") {
+        console.log("quantité et couleur obligatoire");
+        return false;
+    
+    }else {
+        event.preventDefault;
+        console.log(color, "ok");
+        return true;
+    };
+};verifColorsQuantite(color);*/
 
 // sinon
 
@@ -50,4 +101,4 @@ res.json().then((kanap) => {
 // afficher une alert comme quoi le produit XXX a bien été ajouté au panier
 
 // sauvegarder le panier dans le localstorage
-
+});
