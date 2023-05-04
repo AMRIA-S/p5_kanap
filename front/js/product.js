@@ -1,5 +1,5 @@
 const param = new URLSearchParams(window.location.search);
-let idProduct = param.get("id");
+const idProduct = param.get("id");
 
 
 fetch(`http://localhost:3000/api/products/${idProduct}`).then((res) =>
@@ -19,100 +19,64 @@ res.json().then((kanap) => {
         itemColors.innerHTML = colors
     }
     document.querySelector('#quantity').innerHTML = kanap.quantity;
-    
-
     })
 );
 
+function verifQt(quantity) {
+    return ((quantity >= 1) && (quantity <= 100));
+};
+
+// 2 bis. on verifie qu'une couleur a bien été choisie
+function verifColor(color)  {
+    return color != "";
+};
+
+function sauvegarderPanier(panier) {
+    localStorage.setItem("panier", JSON.stringify(panier));
+}
+
+function ajouterProduitAuPanier(product) {
+
+    let panier = JSON.parse(localStorage.getItem("panier"));
+
+    // si panier est vide, alors on le créé
+    if(panier == null) {
+       panier = [];
+       panier.push(product);
+    } else {
+        let produitDejaExistant = panier.find(produitDuPanier => produitDuPanier.id === product.id && product.color === produitDuPanier.color);
+
+        if(produitDejaExistant) {
+            produitDejaExistant.quantity += product.quantity;
+        } else {
+            panier.push(product)
+        }
+    }
+
+    sauvegarderPanier(panier);
+}
 
 // lors du clic sur le bouton "Ajouter au Panier"
-document.getElementById("addToCart").addEventListener("click", function(event) {
+document.getElementById("addToCart").addEventListener("click", function() {
 
     // 1. on recupère la quantité et la couleur choisie
-    var colors = document.querySelector('select');
-    const quantity = document.getElementById('quantity').value;
+    const color = document.querySelector('select').value;
+    const quantity = +document.getElementById('quantity').value;
 
-   function verifQt(quantity) {   
-        // 2. on verifie que la quantité est comprise entre 1 et 100
+    if (verifQt(quantity) && verifColor(color)) {
 
-        if ((quantity >= 1) && (quantity <= 100)) {            
-            //console.log("quantitée selectionnée");
-            return true;
-            
-            
-        }else {
-            //console.log("Veuillez choisir un nombre compris entre 1 et 100");
-            return false;
-        }
-   };verifQt(quantity);  
+         //créer un objet product avec id, couleur et quantitée
+        const product = {
+            id: idProduct,
+            color: color,
+            quantity: quantity
+        };        
 
-
-  // 2 bis. on verifie qu'une couleur a bien été choisie
-    function verifColor(colors)  {
-
-        if (colors.value ==="") {
-            event.preventDefault;
-            //console.log("Veuillez choisir une couleur");
-            return false;
-        }else {
-            //console.log("couleur selectionnée");
-            return true
-        }
-    };verifColor(colors);
-
-
-
-
-    //si quantité non comprise entre 0 et 100 OU que couleur non choisi alors on affiche un message d'erreur dans une alert
-    function verifColorQt() {
-        if (quantity == false || colors.value == false) {
-            event.preventDefault;
-            alert("Veuillez selectionner une quantitité et une couleur");
-            return false;
-
-        }else {
-            return true;
-        }
-
-    };verifColorQt();
-
-
-
-    //créer array panier avec id, couleur et quantitée
-    const products = {
-        id: idProduct,
-        colors: document.querySelector('select').value,
-        quantity: document.getElementById('quantity').value
-    };
-
-    // on récupere le panier de l'utilisateur dans le localstorage
+        ajouterProduitAuPanier(product);
+        
+    } else {
+        alert("Une couleur doit être choisie et la quantité doit être comprise entre 1 et 100 ");
+    }
     
-    let panier = JSON.parse(localStorage.getItem("products"));
-    
-    
-    function ajouterPanier(products) {
-
-        // si panier est vide, alors on le créé
-        if(panier == null) {
-            products.push;
-        }else {
-
-            // sinon on continue
-            console.log("déja présent");
-        };
-    };ajouterPanier(products);
-    console.log(products)
 });
-
-// si le kanap est deja présent dans le panier
-        // on modifie la quantité dans le panier
-   // sinon on l'ajoute dans la panier
-  
-   
-// afficher une alert comme quoi le produit XXX a bien été ajouté au panier
-
-// sauvegarder le panier dans le localstorage
- /*   function savePanier(panier) {
-        localStorage.setItem("panier", JSON.stringify(products));
-    }*/
 
