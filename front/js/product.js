@@ -4,7 +4,6 @@ let idProduct = param.get("id");
 
 fetch(`http://localhost:3000/api/products/${idProduct}`).then((res) =>
 res.json().then((kanap) => {
-    console.log(kanap);
     document.title = kanap.name;
     const itemImage = document.createElement("img");
     document.querySelector(".item__img").appendChild(itemImage);
@@ -30,31 +29,22 @@ res.json().then((kanap) => {
 document.getElementById("addToCart").addEventListener("click", function(event) {
 
     // 1. on recupère la quantité et la couleur choisie
-   // var quantity = document.querySelector('#quantity');
-    //console.log(quantity);
-
-    //var color = document.getElementById('colors');
     var colors = document.querySelector('select');
+    const quantity = document.getElementById('quantity').value;
 
-    
-    
-
-
-
-/*   function verifQt(quantity) {   
+   function verifQt(quantity) {   
         // 2. on verifie que la quantité est comprise entre 1 et 100
 
-        if (quantity.value >= 1 && quantity <= 100) {
-            
-            console.log("Veuillez choisir un nombre compris entre 1 et 100");
-            return false;
+        if ((quantity >= 1) && (quantity <= 100)) {            
+            //console.log("quantitée selectionnée");
+            return true;
             
             
         }else {
-            console.log("quantitée ok");
-            return true;
+            //console.log("Veuillez choisir un nombre compris entre 1 et 100");
+            return false;
         }
-   };verifQt(quantity);  */
+   };verifQt(quantity);  
 
 
   // 2 bis. on verifie qu'une couleur a bien été choisie
@@ -62,10 +52,10 @@ document.getElementById("addToCart").addEventListener("click", function(event) {
 
         if (colors.value ==="") {
             event.preventDefault;
-            console.log("Veuillez choisir une couleur");
+            //console.log("Veuillez choisir une couleur");
             return false;
         }else {
-            console.log("couleur selectionnée");
+            //console.log("couleur selectionnée");
             return true
         }
     };verifColor(colors);
@@ -73,32 +63,56 @@ document.getElementById("addToCart").addEventListener("click", function(event) {
 
 
 
-//si quantité non comprise entre 0 et 100 OU que couleur non choisi alors on affiche un message d'erreur dans une alert
-/*function verifColorsQuantite(quantity, color) {
-    if (quantity >= 1 && quantity <= 100 || color !=="--SVP, choisissez une couleur --") {
-        console.log("quantité et couleur obligatoire");
-        return false;
-    
-    }else {
-        event.preventDefault;
-        console.log(color, "ok");
-        return true;
+    //si quantité non comprise entre 0 et 100 OU que couleur non choisi alors on affiche un message d'erreur dans une alert
+    function verifColorQt() {
+        if (quantity == false || colors.value == false) {
+            event.preventDefault;
+            alert("Veuillez selectionner une quantitité et une couleur");
+            return false;
+
+        }else {
+            return true;
+        }
+
+    };verifColorQt();
+
+
+
+    //créer array panier avec id, couleur et quantitée
+    const products = {
+        id: idProduct,
+        colors: document.querySelector('select').value,
+        quantity: document.getElementById('quantity').value
     };
-};verifColorsQuantite(color);*/
 
-// sinon
-
-   // on récupere le panier de l'utilisateur dans le localstorage
+    // on récupere le panier de l'utilisateur dans le localstorage
+    
+    let panier = JSON.parse(localStorage.getItem("products"));
+    
+    
+    function ajouterPanier(products) {
 
         // si panier est vide, alors on le créé
-        // sinon on continue
+        if(panier == null) {
+            products.push;
+        }else {
 
-   // si le kanap est deja présent dans le panier
+            // sinon on continue
+            console.log("déja présent");
+        };
+    };ajouterPanier(products);
+    console.log(products)
+});
+
+// si le kanap est deja présent dans le panier
         // on modifie la quantité dans le panier
    // sinon on l'ajoute dans la panier
-
-
+  
+   
 // afficher une alert comme quoi le produit XXX a bien été ajouté au panier
 
 // sauvegarder le panier dans le localstorage
-});
+ /*   function savePanier(panier) {
+        localStorage.setItem("panier", JSON.stringify(products));
+    }*/
+

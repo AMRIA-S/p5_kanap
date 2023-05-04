@@ -4,7 +4,6 @@ const res = await fetch ('http://localhost:3000/api/products');
 const items = await res.json();
 
 insertProducts(items);
-console.log(items);
 
 }
 
