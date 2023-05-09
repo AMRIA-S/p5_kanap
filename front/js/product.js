@@ -26,7 +26,7 @@ function verifQt(quantity) {
     return ((quantity >= 1) && (quantity <= 100));
 };
 
-// 2 bis. on verifie qu'une couleur a bien été choisie
+// On verifie qu'une couleur a bien été choisie
 function verifColor(color)  {
     return color != "";
 };
@@ -59,17 +59,35 @@ function ajouterProduitAuPanier(product) {
 // lors du clic sur le bouton "Ajouter au Panier"
 document.getElementById("addToCart").addEventListener("click", function() {
 
-    // 1. on recupère la quantité et la couleur choisie
+    // On recupère la quantité et la couleur choisie
     const color = document.querySelector('select').value;
     const quantity = +document.getElementById('quantity').value;
 
+    // nom, prix, image et son alt pour cart.js et afficher ces infos dans le panier
+    const name = document.querySelector('#title').innerHTML;
+    const price = document.querySelector('#price').innerHTML;
+
+
+
+    let imageURL = document.querySelector('img').innerHTML;
+
+
+
+
+
+
+    
     if (verifQt(quantity) && verifColor(color)) {
 
          //créer un objet product avec id, couleur et quantitée
         const product = {
             id: idProduct,
             color: color,
-            quantity: quantity
+            quantity: quantity,
+            name: name,
+            price: price,
+            imageURL: imageURL,
+            //altTxt: altTxt
         };        
 
         ajouterProduitAuPanier(product);
