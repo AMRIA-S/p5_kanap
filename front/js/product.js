@@ -63,19 +63,6 @@ document.getElementById("addToCart").addEventListener("click", function() {
     const color = document.querySelector('select').value;
     const quantity = +document.getElementById('quantity').value;
 
-    // nom, prix, image et son alt pour cart.js et afficher ces infos dans le panier
-    const name = document.querySelector('#title').innerHTML;
-    const price = document.querySelector('#price').innerHTML;
-
-
-
-    let imageURL = document.querySelector('img').innerHTML;
-
-
-
-
-
-
     
     if (verifQt(quantity) && verifColor(color)) {
 
@@ -84,9 +71,6 @@ document.getElementById("addToCart").addEventListener("click", function() {
             id: idProduct,
             color: color,
             quantity: quantity,
-            name: name,
-            price: price,
-            imageURL: imageURL,
             //altTxt: altTxt
         };        
 
