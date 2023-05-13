@@ -15,35 +15,52 @@ async function afficheArticleDansPanier() {
 
         let product =
             `<article class="cart__item">
-            <div class="cart__item__img">
-                <img src="${article.imageUrl}" alt="${article.altTxt}">
-            </div>
-            <div class="cart__item__content">
-                <div class="cart__item__content__description">
-                    <h2>${article.name}</h2>
-                    <p>${panier[i].color}</p>
-                    <p>${article.price} €</p>
+                <div class="cart__item__img">
+                    <img src="${article.imageUrl}" alt="${article.altTxt}">
                 </div>
-                <div class="cart__item__content__settings">
-                    <div class="cart__item__content__settings__quantity">
-                        <p>Qté : </p>
-                        <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${panier[i].quantity}" data-id="${panier[i].id}" data-color="${panier[i].color}">
+                <div class="cart__item__content">
+                    <div class="cart__item__content__description">
+                        <h2>${article.name}</h2>
+                        <p>${panier[i].color}</p>
+                        <p>${article.price} €</p> 
                     </div>
-                    <div class="cart__item__content__settings__delete">
-                        <p class="deleteItem">Supprimer</p>
+                    <div class="cart__item__content__settings">
+                        <div class="cart__item__content__settings__quantity">
+                            <p>Qté : </p>
+                            <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${panier[i].quantity}" data-id="${panier[i].id}" data-color="${panier[i].color}">
+                        </div>
+                        <div class="cart__item__content__settings__delete">
+                            <p class="deleteItem">Supprimer</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </article>`;
+            </article>`;
         const displayItems = parse.parseFromString(product, "text/html");
-        kanap.appendChild(displayItems.body.firstChild);
-        console.log(" nom: " + article.name + " prix: " + article.price + " couleur: " + panier[i].color + " quantité: " + panier[i].quantity);
-    
+        kanap.appendChild(displayItems.body.firstChild);    
     };
-};afficheArticleDansPanier();
+};
+afficheArticleDansPanier();
 
 
-//Afficher prix total des articles
+
+function calculQuantite() {
+    //recup quantité dans localStorage
+    let panier = JSON.parse(localStorage.getItem("panier"));
+    let totalQuantite = 0;
+
+    for (let i in panier) {
+    totalQuantite += panier[i].quantity;
+    
+    console.log("total quantité " + totalQuantite);
+    }
+
+    const totalQuantity = document.getElementById('totalQuantity');
+    const articles = document.createElement("quantite");
+    totalQuantity.appendChild(articles);
+
+    
+};calculQuantite();
+
 
 
 
