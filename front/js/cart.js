@@ -36,31 +36,27 @@ async function afficheArticleDansPanier() {
                 </div>
             </article>`;
         const displayItems = parse.parseFromString(product, "text/html");
-        kanap.appendChild(displayItems.body.firstChild);    
+        kanap.appendChild(displayItems.body.firstChild);   
+        
+
     };
+
+    let totalQuantite = 0;
+    // Boucle sur la quantité 
+    for (let i in panier) {
+        // Additionne les quantitées dans le panier
+        totalQuantite += panier[i].quantity;
+    };
+    // Affiche le résultat de l'addition ci-dessus
+    document.querySelector('#totalQuantity').innerHTML = totalQuantite;
+
 };
 afficheArticleDansPanier();
 
 
 
-function calculQuantite() {
-    //recup quantité dans localStorage
-    let panier = JSON.parse(localStorage.getItem("panier"));
-    let totalQuantite = 0;
 
-    for (let i in panier) {
-    totalQuantite += panier[i].quantity;
-    
-    console.log("total quantité " + totalQuantite);
-    }
-
-    const totalQuantity = document.getElementById('totalQuantity');
-    const articles = document.createElement("quantite");
-    totalQuantity.appendChild(articles);
-
-    
-};calculQuantite();
-
+// Pour calculer le prix total
 
 
 
