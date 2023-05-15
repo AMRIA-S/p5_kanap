@@ -7,6 +7,7 @@ async function afficheArticleDansPanier() {
     //recup le HTML
     const parse = new DOMParser();
     const kanap = document.getElementById('cart__items');
+    let totalPrix = 0;
     for (let i = 0; i < panier.length; i++) {
 
         //afficher sur la page panier avec une boucle pour remplacer le texte par les valeurs enregistrer dans API et localstorage
@@ -38,6 +39,9 @@ async function afficheArticleDansPanier() {
         const displayItems = parse.parseFromString(product, "text/html");
         kanap.appendChild(displayItems.body.firstChild);   
         
+
+        totalPrix += (panier[i].quantity*article.price);
+        document.querySelector('#totalPrice').innerHTML = totalPrix;
 
     };
 
