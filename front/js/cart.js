@@ -7,8 +7,11 @@ async function afficheArticleDansPanier() {
     //recup le HTML
     const parse = new DOMParser();
     const kanap = document.getElementById('cart__items');
+
+    // On créer valeur qui est est egale à 0 pour calculer le prix
+    let totalQuantite = 0;
     let totalPrix = 0;
-    for (let i = 0; i < panier.length; i++) {
+    for (let i in panier) {
 
         //afficher sur la page panier avec une boucle pour remplacer le texte par les valeurs enregistrer dans API et localstorage
         const res = await fetch ("http://localhost:3000/api/products/" + panier[i].id);
@@ -38,32 +41,41 @@ async function afficheArticleDansPanier() {
             </article>`;
         const displayItems = parse.parseFromString(product, "text/html");
         kanap.appendChild(displayItems.body.firstChild);   
+    
         
+        // On additionne le nombre de quantité à la valeur totalQuantity
+        totalQuantite += panier[i].quantity;
+        document.querySelector('#totalQuantity').innerHTML = totalQuantite;
 
+
+        // On reprends la veleur (0) et on l'aditionne au résultat de la multiplication (qté et prix de chaque article)
         totalPrix += (panier[i].quantity*article.price);
         document.querySelector('#totalPrice').innerHTML = totalPrix;
 
+
+
+
+        const qte = document.querySelector('.itemQuantity');
+        const dataId = qte.dataset.id;
+        const dataColor = qte.dataset.color
+        console.log("data-id : " + dataId + " data-color : " + dataColor)
+        const articleDansPanier =  document.querySelector('.cart__item');
+
+
+            //event pour supprimer article
+        document.querySelector('.deleteItem').addEventListener("click", function(){
+            articleDansPanier.remove();
+        })
+             
+            
+            //localStorage.removeItem(panier[i].quantity);
+            //console.log(articles)
+
+        
+
     };
 
-    let totalQuantite = 0;
-    // Boucle sur la quantité 
-    for (let i in panier) {
-        // Additionne les quantitées dans le panier
-        totalQuantite += panier[i].quantity;
-    };
-    // Affiche le résultat de l'addition ci-dessus
-    document.querySelector('#totalQuantity').innerHTML = totalQuantite;
-
-};
-afficheArticleDansPanier();
-
-
-
-
-// Pour calculer le prix total
-
-
-
+};afficheArticleDansPanier();
 
 //1. element.closet() pour savoir quel produit modifier (data-id et data-color)
 
