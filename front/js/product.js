@@ -71,7 +71,6 @@ document.getElementById("addToCart").addEventListener("click", function() {
             id: idProduct,
             color: color,
             quantity: quantity,
-            //altTxt: altTxt
         };        
 
         ajouterProduitAuPanier(product);

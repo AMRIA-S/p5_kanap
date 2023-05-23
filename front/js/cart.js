@@ -18,7 +18,7 @@ async function afficheArticleDansPanier() {
         const article = await res.json();
 
         let product =
-            `<article class="cart__item">
+            `<article class="cart__item" data-id="${panier[i].id}" data-color="${panier[i].color}">
                 <div class="cart__item__img">
                     <img src="${article.imageUrl}" alt="${article.altTxt}">
                 </div>
@@ -31,7 +31,7 @@ async function afficheArticleDansPanier() {
                     <div class="cart__item__content__settings">
                         <div class="cart__item__content__settings__quantity">
                             <p>Qté : </p>
-                            <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${panier[i].quantity}" data-id="${panier[i].id}" data-color="${panier[i].color}">
+                            <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${panier[i].quantity}">
                         </div>
                         <div class="cart__item__content__settings__delete">
                             <p class="deleteItem">Supprimer</p>
@@ -45,35 +45,49 @@ async function afficheArticleDansPanier() {
         
         // On additionne le nombre de quantité à la valeur totalQuantity
         totalQuantite += panier[i].quantity;
-        document.querySelector('#totalQuantity').innerHTML = totalQuantite;
-
-
-        // On reprends la veleur (0) et on l'aditionne au résultat de la multiplication (qté et prix de chaque article)
+        // On aditionne au résultat de la multiplication (qté et prix de chaque article)
         totalPrix += (panier[i].quantity*article.price);
-        document.querySelector('#totalPrice').innerHTML = totalPrix;
+       
+        
+        /*------------------ Problème Pour Supprimer Un Article ----------------  
+        const articleDansPanier =  document.querySelector(`.cart__item[data-id='${panier[i].id}'][data-color='${panier[i].color}']`);
 
-
-
-
-        const qte = document.querySelector('.itemQuantity');
-        const dataId = qte.dataset.id;
-        const dataColor = qte.dataset.color
-        console.log("data-id : " + dataId + " data-color : " + dataColor)
-        const articleDansPanier =  document.querySelector('.cart__item');
-
-
-            //event pour supprimer article
-        document.querySelector('.deleteItem').addEventListener("click", function(){
+        //event pour supprimer article
+        document.querySelector(`.cart__item[data-id='${panier[i].id}'][data-color='${panier[i].color}'] .deleteItem`).addEventListener("click", function(e) {
+            e.preventDefault();
             articleDansPanier.remove();
-        })
-             
+            let panier = JSON.parse(localStorage.getItem('panier'));
+            let panierFiltrer = panier.filter(panier => panier.id === articleDansPanier.dataset.id && panier.color === articleDansPanier.dataset.color);
             
-            //localStorage.removeItem(panier[i].quantity);
-            //console.log(articles)
+         
+            panier = panierFiltrer;
+            localStorage.setItem("panier", JSON.stringify(panier));
+            
 
+            //localStorage.removeItem('panier');
+            console.log(panier)
+        }); ----------------- Problème Pour Supprimer Un Article (Fin) -----------------------*/
+        
+        
+        document.querySelector(`.cart__item[data-id='${panier[i].id}'][data-color='${panier[i].color}'] .itemQuantity`).addEventListener('change', function() {
+            // Rafraichie la page automatiquement
+            location.reload();    
+            let valeurQte = document.querySelector(`.cart__item[data-id='${panier[i].id}'][data-color='${panier[i].color}'] .itemQuantity`).value;
+            
+            // On convertit une chaîne de caractères en nombre
+            let ConvertirStringEnNombre = parseFloat(valeurQte);
+
+            // On utilise le nombre précédent pour l'ajouter au panier
+            panier[i].quantity = ConvertirStringEnNombre;
+            localStorage.setItem("panier", JSON.stringify(panier));
+            
+        });
         
 
+
     };
+    document.querySelector('#totalQuantity').innerHTML = totalQuantite;
+    document.querySelector('#totalPrice').innerHTML = totalPrix;
 
 };afficheArticleDansPanier();
 
