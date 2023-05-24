@@ -49,26 +49,23 @@ async function afficheArticleDansPanier() {
         totalPrix += (panier[i].quantity*article.price);
        
         
-        /*------------------ Problème Pour Supprimer Un Article ----------------  
+        /*------------------------------------ Supprimer Un Article ------------------------------------ */ 
         const articleDansPanier =  document.querySelector(`.cart__item[data-id='${panier[i].id}'][data-color='${panier[i].color}']`);
 
         //event pour supprimer article
-        document.querySelector(`.cart__item[data-id='${panier[i].id}'][data-color='${panier[i].color}'] .deleteItem`).addEventListener("click", function(e) {
-            e.preventDefault();
+        document.querySelector(`.cart__item[data-id='${panier[i].id}'][data-color='${panier[i].color}'] .deleteItem`).addEventListener("click", function() {
+            location.reload();
             articleDansPanier.remove();
             let panier = JSON.parse(localStorage.getItem('panier'));
-            let panierFiltrer = panier.filter(panier => panier.id === articleDansPanier.dataset.id && panier.color === articleDansPanier.dataset.color);
+            let panierFiltrer = panier.filter(panier => panier.id !== articleDansPanier.dataset.id || panier.color !== articleDansPanier.dataset.color);
             
          
             panier = panierFiltrer;
             localStorage.setItem("panier", JSON.stringify(panier));
-            
-
-            //localStorage.removeItem('panier');
-            console.log(panier)
-        }); ----------------- Problème Pour Supprimer Un Article (Fin) -----------------------*/
+    
+        }); 
         
-        
+        /*------------------------------------ Modifier Quantité ------------------------------------*/
         document.querySelector(`.cart__item[data-id='${panier[i].id}'][data-color='${panier[i].color}'] .itemQuantity`).addEventListener('change', function() {
             // Rafraichie la page automatiquement
             location.reload();    
@@ -91,13 +88,42 @@ async function afficheArticleDansPanier() {
 
 };afficheArticleDansPanier();
 
-//1. element.closet() pour savoir quel produit modifier (data-id et data-color)
 
-//2. lors du click sur input pour modifier la quantité (évenèment de modification)
+/*----------------------- Remplir Le Formualire -----------------------*/
+    const prenom = document.getElementById('firstName');
+    const nom = document.getElementById('lastName');
+    const adresse = document.getElementById('address');
+    const ville = document.getElementById('city');
+    const email = document.getElementById('email');
+    
+    
+    const erreurPrenom = document.getElementById('firstNameErrorMsg');
+    const erreurNom = document.getElementById('lastNameErrorMsg');
+    //const erreurAdresse = document.getElementById('addressErrorMsg');
+    //const erreurVille = document.getElementById('cityErrorMsg');
+    //const erreurEmail = document.getElementById('emailErrorMsg');
 
-//3. modification qté dans localStorage 
-    //recup la sauvegarde
+    const ChampLettre = /[a-zA-Z]/;
+document.getElementById('order').addEventListener('click', function(e){
 
-    //sauvegarde total qté dans localStorage
+    if (ChampLettre.test(prenom.value) == false){
+        e.preventDefault();
+        erreurPrenom.textContent = "Ce champs doit contenir uniquement des lettres";
+    }else if (ChampLettre.test(nom.value) == false) {
+        e.preventDefault();
+        erreurNom.textContent = "Ce champs doit contenir uniquement des lettres";
+    }else {
+        console.log("ok");
+    };
+    //1. Message Erreur (en dessous du champs) lors du remplissage du formulaire
+    
 
-//4. modification du DOM
+        //1.1 Nom et Prénom avec seulemnt des lettres      
+        //1.2 Email avec @ obligatoire
+});
+
+
+    //2. Requête Post
+        //method:
+        //headers:
+        //body:
