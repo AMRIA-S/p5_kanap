@@ -54,21 +54,24 @@ async function afficheArticleDansPanier() {
 
         //event pour supprimer article
         document.querySelector(`.cart__item[data-id='${panier[i].id}'][data-color='${panier[i].color}'] .deleteItem`).addEventListener("click", function() {
-            location.reload();
             articleDansPanier.remove();
             let panier = JSON.parse(localStorage.getItem('panier'));
             let panierFiltrer = panier.filter(panier => panier.id !== articleDansPanier.dataset.id || panier.color !== articleDansPanier.dataset.color);
             
-         
             panier = panierFiltrer;
             localStorage.setItem("panier", JSON.stringify(panier));
+            
+        // On additionne le nombre de quantité à la valeur totalQuantity
+        totalQuantite += panier[i].quantity;
+        // On aditionne au résultat de la multiplication (qté et prix de chaque article)
+        totalPrix += (panier[i].quantity*article.price);
     
         }); 
         
         /*------------------------------------ Modifier Quantité ------------------------------------*/
         document.querySelector(`.cart__item[data-id='${panier[i].id}'][data-color='${panier[i].color}'] .itemQuantity`).addEventListener('change', function() {
             // Rafraichie la page automatiquement
-            location.reload();    
+  
             let valeurQte = document.querySelector(`.cart__item[data-id='${panier[i].id}'][data-color='${panier[i].color}'] .itemQuantity`).value;
             
             // On convertit une chaîne de caractères en nombre
@@ -92,34 +95,38 @@ async function afficheArticleDansPanier() {
 /*----------------------- Remplir Le Formualire -----------------------*/
     const prenom = document.getElementById('firstName');
     const nom = document.getElementById('lastName');
-    const adresse = document.getElementById('address');
-    const ville = document.getElementById('city');
     const email = document.getElementById('email');
     
     
     const erreurPrenom = document.getElementById('firstNameErrorMsg');
     const erreurNom = document.getElementById('lastNameErrorMsg');
-    //const erreurAdresse = document.getElementById('addressErrorMsg');
-    //const erreurVille = document.getElementById('cityErrorMsg');
-    //const erreurEmail = document.getElementById('emailErrorMsg');
+    const erreurEmail = document.getElementById('emailErrorMsg');
 
-    const ChampLettre = /[a-zA-Z]/;
+    const ChampLettre = /[a-zA-Zà-ü]/;
+    const ChampEmail = /[@]/;
 document.getElementById('order').addEventListener('click', function(e){
 
-    if (ChampLettre.test(prenom.value) == false){
+    //1. Message Erreur (en dessous du champs) lors du remplissage du formulaire
+    if (ChampLettre.test(prenom.value) == false) {
         e.preventDefault();
         erreurPrenom.textContent = "Ce champs doit contenir uniquement des lettres";
-    }else if (ChampLettre.test(nom.value) == false) {
+    }else {
+        erreurPrenom.textContent = "";
+    };
+
+    if (ChampLettre.test(nom.value) == false) {
         e.preventDefault();
         erreurNom.textContent = "Ce champs doit contenir uniquement des lettres";
     }else {
-        console.log("ok");
+        erreurNom.textContent = "";
     };
-    //1. Message Erreur (en dessous du champs) lors du remplissage du formulaire
-    
 
-        //1.1 Nom et Prénom avec seulemnt des lettres      
-        //1.2 Email avec @ obligatoire
+    if (ChampEmail.test(email.value) == false) {
+        e.preventDefault();
+        erreurEmail.textContent = "Ce champs doit contenir une adresse email valide ex: 'nom.prenom@gmail.com'";
+    }else {
+        erreurNom.textContent = "";
+    };
 });
 
 
