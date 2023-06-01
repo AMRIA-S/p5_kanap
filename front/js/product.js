@@ -54,6 +54,7 @@ function ajouterProduitAuPanier(product) {
     }
 
     sauvegarderPanier(panier);
+    //alert("Article(s) ajouté(s) au panier")
 }
 
 // lors du clic sur le bouton "Ajouter au Panier"
