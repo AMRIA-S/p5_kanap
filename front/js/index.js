@@ -1,4 +1,4 @@
-async function getProduct() {
+async function getProductAndDisplay() {
 //pieces dans API
 const res = await fetch ('http://localhost:3000/api/products');
 const items = await res.json();
@@ -25,4 +25,4 @@ function insertProducts(products) {
     };
 }
 
-getProduct();
+getProductAndDisplay();

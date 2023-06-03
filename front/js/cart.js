@@ -76,11 +76,10 @@ document.querySelector('#totalQuantity').innerHTML = totalQuantite;
             panier = panierFiltrer;
             localStorage.setItem("panier", JSON.stringify(panier));
 
-            let paniers = JSON.parse(localStorage.getItem('panier'));
 
                 //calcul du prix et de la quantité
-                totalQuantite -= paniers[i].quantity;
-                totalPrix -= (paniers[i].quantity*prix);
+                totalQuantite -= panier[i].quantity;
+                totalPrix -= (panier[i].quantity*prix);
             
              if (totalQuantite == 0) {
                 messagePanierVide.innerText = "Votre panier est vide";
@@ -97,34 +96,29 @@ document.querySelector('#totalQuantity').innerHTML = totalQuantite;
             
         /*------------------------------------ Modifier Quantité ------------------------------------*/
         document.querySelector(`.cart__item[data-id='${id}'][data-color='${color}'] .itemQuantity`).addEventListener('change', function(event) {
-            let valeurQte = event.target.value;
+            let valeurQuantite = +event.target.value;
 
             let panier = JSON.parse(localStorage.getItem('panier'));
-            let panierQte = panier.find(element => element.color == panier[i].color && element.id == panier[i].id);
-            // On utilise le nombre précédent pour l'ajouter au panier
-            panierQte.quantity = +valeurQte;
+            let kanap = panier.find(element => element.color === panier[i].color && element.id === panier[i].id);
             localStorage.setItem("panier", JSON.stringify(panier));
+            
+            kanap.quantity = valeurQuantite;
+            
 
-           
-            let rapellePanier = JSON.parse(localStorage.getItem('panier'));
-           
 
-            let totalQuantite = 0;
-            let totalPrix = 0;
+            const oldTotalQuantite = +document.querySelector('#totalQuantity').innerHTML;
+            const oldTotalPrix = +document.querySelector('#totalPrice').innerHTML;
 
-            for (let i in rapellePanier) {
-                totalQuantite += rapellePanier[i].quantity;
-                totalPrix += (rapellePanier[i].quantity*prix);
-                console.log(rapellePanier[i].quantity*prix)
-            };
+            const newTotalQuantite = oldTotalQuantite - kanap.quantity + valeurQuantite;
+            const newTotalPrix =  oldTotalPrix - (kanap.quantity*prix) + (prix*valeurQuantite);
             
             if (totalQuantite == 0) {
                 messagePanierVide.innerText = "Votre panier est vide";
             }
+            document.querySelector('#totalQuantity').innerHTML = newTotalQuantite;
+            document.querySelector('#totalPrice').innerHTML= newTotalPrix;
 
-            
-            document.querySelector('#totalQuantity').innerHTML = totalQuantite;
-            document.querySelector('#totalPrice').innerHTML = totalPrix;
+            console.log()
             
         });
         
