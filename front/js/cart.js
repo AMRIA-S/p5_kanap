@@ -59,37 +59,39 @@ async function afficheArticleDansPanier() {
         totalPrix += (panier[i].quantity*prix);
         
 
-document.querySelector('#totalQuantity').innerHTML = totalQuantite;
-        document.querySelector('#totalPrice').innerHTML = totalPrix;
-
         /*------------------------------------ Supprimer Un Article ------------------------------------ */ 
         const articleDansPanier = document.querySelector(`.cart__item[data-id='${id}'][data-color='${color}']`);
 
         //event pour supprimer article
         document.querySelector(`.cart__item[data-id='${id}'][data-color='${color}'] .deleteItem`).addEventListener("click", function(e) {
-            
+            e.preventDefault();
             articleDansPanier.remove();
             let panier = JSON.parse(localStorage.getItem('panier'));
 
             // Supprimer le(s) article(s) du localStorage
             let panierFiltrer = panier.filter(element => element.id !== articleDansPanier.dataset.id || element.color !== articleDansPanier.dataset.color);
+            
+            let kanapSupprime = panier.find(element => element.id == articleDansPanier.dataset.id && element.color == articleDansPanier.dataset.color);
+            
+            
+
+            const oldTotalQuantite = +document.querySelector('#totalQuantity').innerHTML;
+            const oldTotalPrix = +document.querySelector('#totalPrice').innerHTML;
+        
+            const newTotalQuantite = oldTotalQuantite - kanapSupprime.quantity;
+            const newTotalPrix =  oldTotalPrix - (kanapSupprime.quantity*prix);
+            
+            kanapSupprime =  panierFiltrer;
             panier = panierFiltrer;
             localStorage.setItem("panier", JSON.stringify(panier));
-
-
-                //calcul du prix et de la quantité
-                totalQuantite -= panier[i].quantity;
-                totalPrix -= (panier[i].quantity*prix);
             
-             if (totalQuantite == 0) {
+            document.querySelector('#totalQuantity').innerHTML = newTotalQuantite;
+            document.querySelector('#totalPrice').innerHTML= newTotalPrix;
+
+            if (newTotalQuantite == 0) {
                 messagePanierVide.innerText = "Votre panier est vide";
             }
-            document.querySelector('#totalQuantity').innerHTML = totalQuantite;
-            document.querySelector('#totalPrice').innerHTML = totalPrix;
         
-
-            // Affiche dans le prix et le nombre d'article
-            
         }); 
             
 
@@ -100,25 +102,18 @@ document.querySelector('#totalQuantity').innerHTML = totalQuantite;
 
             let panier = JSON.parse(localStorage.getItem('panier'));
             let kanap = panier.find(element => element.color === panier[i].color && element.id === panier[i].id);
-            localStorage.setItem("panier", JSON.stringify(panier));
             
-            kanap.quantity = valeurQuantite;
-            
-
-
             const oldTotalQuantite = +document.querySelector('#totalQuantity').innerHTML;
             const oldTotalPrix = +document.querySelector('#totalPrice').innerHTML;
 
             const newTotalQuantite = oldTotalQuantite - kanap.quantity + valeurQuantite;
-            const newTotalPrix =  oldTotalPrix - (kanap.quantity*prix) + (prix*valeurQuantite);
+            const newTotalPrix =  oldTotalPrix - (kanap.quantity*prix) + (valeurQuantite*prix);
             
-            if (totalQuantite == 0) {
-                messagePanierVide.innerText = "Votre panier est vide";
-            }
+            kanap.quantity = valeurQuantite;
+            localStorage.setItem("panier", JSON.stringify(panier));
+
             document.querySelector('#totalQuantity').innerHTML = newTotalQuantite;
             document.querySelector('#totalPrice').innerHTML= newTotalPrix;
-
-            console.log()
             
         });
         
@@ -130,6 +125,8 @@ document.querySelector('#totalQuantity').innerHTML = totalQuantite;
     if (totalQuantite == 0) {
         messagePanierVide.innerText = "Votre panier est vide";
     }
+        document.querySelector('#totalQuantity').innerHTML = totalQuantite;
+        document.querySelector('#totalPrice').innerHTML = totalPrix;
     
 
 };afficheArticleDansPanier();
@@ -155,68 +152,58 @@ const erreurEmail = document.getElementById('emailErrorMsg');
 const champNomPrenom = /^[A-Za-zà-üÀ-Ü -]+$/;
 const champAdresse = /^[A-Za-zà-üÀ-Ü0-9' -]+$/;
 const champVille = /^[A-Za-zà-üÀ-Ü/ -]+$/;
-const champEmail = /@/;/*^[A-Za-z0-9-.]*@[a-z]*[.][a-z]+$*/
+const champEmail = /^[A-Za-z0-9-.]*@[a-z]*[.][a-z]+$/;
 
 
 document.getElementById('order').addEventListener('click', function(e){
-    
-   
 
     // On créer une fonction type
-    function champInvalide (champs, valeur, erreurValeur, msgerreur) {
-    
+    function champInvalide (e, champs, valeur, erreurValeur, msgerreur) {
+     e.preventDefault();
         if (champs.test(valeur.value) === false) {
-            erreurValeur.textContent = msgerreur; e.preventDefault();
-        }else {
+           
+            erreurValeur.textContent = msgerreur;
+        }else{
             erreurValeur.textContent = "";
-            e.preventDefault();
         };
     };
 
     // On utilise cette fonction en incrémentant l'input, id et la constante
-    champInvalide (champNomPrenom, nom, erreurNom, "Ce champ doit contenir uniquement des lettres en MAJUSCULES, minuscules ou avec Accents !");
-    champInvalide (champNomPrenom, prenom, erreurPrenom, "Ce champ doit contenir uniquement des lettres en MAJUSCULES, minuscules ou avec Accents !");
-    champInvalide (champAdresse, adresse, erreurAdresse, "Ce champ doit contenir uniquement des chiffres et des lettres, !");
-    champInvalide (champVille, ville, erreurVille, "Ce champ ne peut pas contenir un nombre et des caractères spéciaux exeptés / et -");
-    champInvalide (champEmail, email, erreurEmail, "Ce champ doit contenir une adresse mail valide ! Exemple: nom.prenom@gmail.com ou surnom@gmail.com");
+    champInvalide (e, champNomPrenom, nom, erreurNom, "Ce champ doit contenir uniquement des lettres en MAJUSCULES, minuscules ou avec Accents !");
+    champInvalide (e, champNomPrenom, prenom, erreurPrenom, "Ce champ doit contenir uniquement des lettres en MAJUSCULES, minuscules ou avec Accents !");
+    champInvalide (e, champAdresse, adresse, erreurAdresse, "Ce champ doit contenir uniquement des chiffres et des lettres !");
+    champInvalide (e, champVille, ville, erreurVille, "Ce champ ne peut pas contenir un nombre et des caractères spéciaux exeptés / et -");
+    champInvalide (e, champEmail, email, erreurEmail, "Ce champ doit contenir une adresse mail valide ! Exemple: nom.prenom@gmail.com ou surnom@gmail.com");
     //alert("Nous vous remercions de votre commande");
 
-    async function envoyerFormulaire(produit) {
+    async function envoyerFormulaire() {
         let panier = JSON.parse(localStorage.getItem("panier"));
+        products = [];
         for (let i in panier) {
-            const rep = await fetch ("http://localhost:3000/api/products/" + panier[i].id);
-            const article = await rep.json();
-        
-            // Produit dans le panier
-            produit = {
-                nom: article.name,
-                couleur: panier[i].color,
-                prix: article.price,
-                quantite: panier[i].quantity
-            };
-        };  
-            // valeurs des champs du formulaire
-            const contact = {
-                prenom: prenom.value,
-                nom: nom.value,
-                adresse: adresse.value,
-                ville: ville.value,
-                email: email.value
-            };
+            products.push(panier[i].id);          
+        }
             
-            // transformation de du tableau en chaîne de caractère
-            const objetContact = JSON.stringify(contact);
-            const objetProduit = JSON.stringify(produit);
-            console.log(objetProduit);
+        // valeurs des champs du formulaire
+        const contact = {
+            firstName: prenom.value,
+            lastName: nom.value,
+            address: adresse.value,
+            city: ville.value,
+            email: email.value
+        };
+           
 
-            // Appel à api avec method post
-            const res =  fetch("http://localhost:3000/api/products/order", {
-                method: "POST",
-                headers: { "Content-Type": "application/json"},
-                body: objetContact , objetProduit
-            });
-            let result = await response.json();
-        
+        // Appel à api avec method post
+        const reponse = await fetch("http://localhost:3000/api/products/order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({contact, products})
+        })
+        const resultat = await reponse.json();
+        console.log(resultat);
+
+        /*const orderId = resultat.orderId;
+        document.location.href = `../confirmation.html?=${orderId}`;*/
 
     };
     envoyerFormulaire();
