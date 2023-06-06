@@ -1,16 +1,10 @@
-async function afficherNumeroCommande() {
-  const reponse = await fetch("http://localhost:3000/api/products/order")
-  const req = reponse.json();
-  
-  document.getElementById('orderId') = orderId;
-  console.log(orderId);
-  console.log(req);
+// URLSearchParams pour récupérer le numéro de commande affiché dans l'Url
+const param = new URLSearchParams(window.location.search);
+const orderId = param.get("orderId");
+
+
+function afficherNumeroCommande() {
+  // Récupère id de l'élement html où doit s'afficher le prix et lui applique la variable du numéro de commande "orderId"
+  document.getElementById('orderId').innerText = orderId;
 };
-
-
-
-/*
-<div class="confirmation">
-  <p>Commande validée ! <br>Votre numéro de commande est : <span id="orderId"><!-- 65431343444684674 --></span></p>
-</div>
-*/
+afficherNumeroCommande();
