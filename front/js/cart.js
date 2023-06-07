@@ -4,6 +4,15 @@ async function afficheArticleDansPanier() {
     // Récupérer le panier du client enregistré dans localStorage
     let panier = JSON.parse(localStorage.getItem("panier")); 
 
+    // Trier les canapés par modèle
+    panier.sort(function (a, b) {
+        var idA = a.id.toUpperCase();
+        var idB = b.id.toUpperCase();
+        if (idA < idB) {
+            return -1;
+        }
+    });
+
     // Utilise le DOMParser pour créer les éléments dans l'id de cart__items du HTML
     const parse = new DOMParser();
     const kanap = document.querySelector('#cart__items');
@@ -57,6 +66,7 @@ async function afficheArticleDansPanier() {
         const color = panier[i].color;
         const prix = article.price;
 
+        
         /*----------------------- Calcul du prix et de la quantité ----------------------- */
         // On additionne le nombre de quantité à la valeur totalQuantity
         totalQuantite += panier[i].quantity;
@@ -142,18 +152,13 @@ async function afficheArticleDansPanier() {
         });
         
         
-        // Trier les canapés par modèle
-        panier.sort(function (a, b) {
-            var idA = a.id.toUpperCase();
-            var idB = b.id.toUpperCase();
-            if (idA < idB) {
-                return -1;
-            }
-        });
+        
 
 
     };
     
+
+
 
     // Afficher texte "Votre panier est vide" si il n'y a pas d'article
     if (totalQuantite == 0) {
