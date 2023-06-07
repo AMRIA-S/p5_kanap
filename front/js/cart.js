@@ -63,6 +63,7 @@ async function afficheArticleDansPanier() {
         // On aditionne au résultat de la multiplication (quantité et prix de chaque article)
         totalPrix += (panier[i].quantity*prix);
         
+        
 
         /*------------------------------------ Supprimer Un Article ------------------------------------ */ 
 
@@ -140,10 +141,20 @@ async function afficheArticleDansPanier() {
             document.querySelector('#totalPrice').innerHTML= newTotalPrix;            
         });
         
-
         
+        // Trier les canapés par modèle
+        panier.sort(function (a, b) {
+            var idA = a.id.toUpperCase();
+            var idB = b.id.toUpperCase();
+            if (idA < idB) {
+                return -1;
+            }
+        });
+
+
     };
     
+
     // Afficher texte "Votre panier est vide" si il n'y a pas d'article
     if (totalQuantite == 0) {
         messagePanierVide.innerText = "Votre panier est vide";
