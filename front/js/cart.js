@@ -12,7 +12,7 @@ async function afficheArticleDansPanier() {
     const messagePanierVide = document.createElement("h2");
     kanap.appendChild(messagePanierVide);
     
-    // On créer valeur qui est est égale à 0 pour calculer le prix et la quantitée
+    // On créer une valeur qui est est égale à 0 pour calculer le prix et la quantité
     let totalQuantite = 0;
     let totalPrix = 0;
 
@@ -57,10 +57,10 @@ async function afficheArticleDansPanier() {
         const color = panier[i].color;
         const prix = article.price;
 
-        /*----------------------- Calcul du prix et de la quantitée ----------------------- */
+        /*----------------------- Calcul du prix et de la quantité ----------------------- */
         // On additionne le nombre de quantité à la valeur totalQuantity
         totalQuantite += panier[i].quantity;
-        // On aditionne au résultat de la multiplication (quantitée et prix de chaque article)
+        // On aditionne au résultat de la multiplication (quantité et prix de chaque article)
         totalPrix += (panier[i].quantity*prix);
         
 
@@ -82,11 +82,11 @@ async function afficheArticleDansPanier() {
             let panierFiltrer = panier.filter(element => element.id !== articleDansPanier.dataset.id || element.color !== articleDansPanier.dataset.color);
             let kanapSupprime = panier.find(element => element.id == articleDansPanier.dataset.id && element.color == articleDansPanier.dataset.color);
             
-            // Récupère le prix et la quantitée total au départ en le convertissant en Number
+            // Récupère le prix et la quantité total au départ en le convertissant en Number
             const oldTotalQuantite = +document.querySelector('#totalQuantity').innerHTML;
             const oldTotalPrix = +document.querySelector('#totalPrice').innerHTML;
             
-            // Calcule du prix et de la quantitée
+            // Calcule du prix et de la quantité
             const newTotalQuantite = oldTotalQuantite - kanapSupprime.quantity;
             const newTotalPrix =  oldTotalPrix - (kanapSupprime.quantity*prix);
             
@@ -97,7 +97,7 @@ async function afficheArticleDansPanier() {
             // Enregistre le(s) article(s) du localStorage
             localStorage.setItem("panier", JSON.stringify(panier));
             
-            // Mettre à jour le prix et quantitée avec les nouvelles valeurs
+            // Mettre à jour le prix et quantité avec les nouvelles valeurs
             document.querySelector('#totalQuantity').innerHTML = newTotalQuantite;
             document.querySelector('#totalPrice').innerHTML= newTotalPrix;
 
@@ -121,11 +121,11 @@ async function afficheArticleDansPanier() {
             // Utilisation de la méthode Find pour comparer l'id et color du localStorage
             let kanap = panier.find(element => element.color === panier[i].color && element.id === panier[i].id);
             
-            // Récupère le prix et la quantitée total au départ en le convertissant en Number
+            // Récupère le prix et la quantité total au départ en le convertissant en Number
             const oldTotalQuantite = +document.querySelector('#totalQuantity').innerHTML;
             const oldTotalPrix = +document.querySelector('#totalPrice').innerHTML;
 
-            // Calcule du prix et de la quantitée
+            // Calcule du prix et de la quantité
             const newTotalQuantite = oldTotalQuantite - kanap.quantity + valeurQuantite;
             const newTotalPrix =  oldTotalPrix - (kanap.quantity*prix) + (valeurQuantite*prix);
             
@@ -135,7 +135,7 @@ async function afficheArticleDansPanier() {
             // Enregistre le(s) article(s) du localStorage
             localStorage.setItem("panier", JSON.stringify(panier));
 
-            // Mettre à jour le prix et quantitée avec les nouvelles valeurs
+            // Mettre à jour le prix et quantité avec les nouvelles valeurs
             document.querySelector('#totalQuantity').innerHTML = newTotalQuantite;
             document.querySelector('#totalPrice').innerHTML= newTotalPrix;            
         });
@@ -207,6 +207,7 @@ document.getElementById('order').addEventListener('click', function(e){
         // Création tableau vide 'products'
         products = [];
         for (let i in panier) {
+            // Ajouter l'id enregistré dans le localStorage
             products.push(panier[i].id);          
         }
             

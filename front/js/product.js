@@ -23,7 +23,7 @@ res.json().then((kanap) => {
     })
 );
 
-// Fonction pour vérifier que la quantitée est ien comprise entre 1 et 100
+// Fonction pour vérifier que la quantité est ien comprise entre 1 et 100
 function verifierQuantite(quantity) {
     return ((quantity >= 1) && (quantity <= 100));
 };
@@ -50,7 +50,7 @@ function ajouterProduitAuPanier(product) {
     } else {
         let produitDejaExistant = panier.find(produitDuPanier => produitDuPanier.id === product.id && product.color === produitDuPanier.color);
 
-        // Sinon on ajoute juste la quantitée si l'id et la couleur du canapé existe déja
+        // Sinon on ajoute juste la quantité si l'id et la couleur du canapé existe déja
         if(produitDejaExistant) {
             produitDejaExistant.quantity += product.quantity;
         } else {
@@ -69,15 +69,15 @@ function ajouterProduitAuPanier(product) {
 // Lors du clic sur le bouton "Ajouter au Panier"
 document.getElementById("addToCart").addEventListener("click", function() {
 
-    // Recupèration de la quantitée et la couleur choisie en convertissant la valeur du nombre en Number au lieu de string
+    // Recupèration de la quantité et la couleur choisie en convertissant la valeur du nombre en Number au lieu de string
     const color = document.querySelector('select').value;
     const quantity = +document.getElementById('quantity').value;
 
-    // Condition pour vérifier si la quantitée et la couleur ont été choisi
+    // Condition pour vérifier si la quantité et la couleur ont été choisi
     if (verifierQuantite(quantity) && verifierColor(color)) {
         // Si oui :
 
-        //création d'un objet 'product' avec id, couleur et quantitée
+        //création d'un objet 'product' avec id, couleur et quantité
         const product = {
             id: idProduct,
             color: color,
