@@ -4,14 +4,7 @@ async function afficheArticleDansPanier() {
     // Récupérer le panier du client enregistré dans localStorage
     let panier = JSON.parse(localStorage.getItem("panier")); 
 
-    // Trier les canapés par modèle
-    panier.sort(function (a, b) {
-        var idA = a.id.toUpperCase();
-        var idB = b.id.toUpperCase();
-        if (idA < idB) {
-            return -1;
-        }
-    });
+    
 
     // Utilise le DOMParser pour créer les éléments dans l'id de cart__items du HTML
     const parse = new DOMParser();
@@ -24,6 +17,15 @@ async function afficheArticleDansPanier() {
     // On créer une valeur qui est est égale à 0 pour calculer le prix et la quantité
     let totalQuantite = 0;
     let totalPrix = 0;
+
+    // Trier les canapés par modèle
+    panier.sort(function (a, b) {
+        var idA = a.id.toUpperCase();
+        var idB = b.id.toUpperCase();
+        if (idA < idB) {
+            return -1;
+        }
+    });
 
     // Boucle sur le panier (localStorage)
     for (let i in panier) {
@@ -150,16 +152,8 @@ async function afficheArticleDansPanier() {
             document.querySelector('#totalQuantity').innerHTML = newTotalQuantite;
             document.querySelector('#totalPrice').innerHTML= newTotalPrix;            
         });
-        
-        
-        
-
-
     };
     
-
-
-
     // Afficher texte "Votre panier est vide" si il n'y a pas d'article
     if (totalQuantite == 0) {
         messagePanierVide.innerText = "Votre panier est vide";
@@ -215,26 +209,26 @@ document.getElementById('order').addEventListener('click', function(e){
     champInvalide (e, champEmail, email, erreurEmail, "Ce champ doit contenir une adresse mail valide ! Exemple: nom.prenom@gmail.com ou surnom@gmail.com");
 
 
+    // Récupérer le panier du client enregistré dans localStorage
+    let panier = JSON.parse(localStorage.getItem("panier"));
+
+    // Création tableau vide 'products'
+    products = [];
+    for (let i in panier) {
+        // Ajouter l'id enregistré dans le localStorage
+        products.push(panier[i].id);          
+    }
+        
+    // valeurs des champs du formulaire
+    const contact = {
+        firstName: prenom.value,
+        lastName: nom.value,
+        address: adresse.value,
+        city: ville.value,
+        email: email.value
+    };
+    
     async function envoyerFormulaire() {
-
-        // Récupérer le panier du client enregistré dans localStorage
-        let panier = JSON.parse(localStorage.getItem("panier"));
-
-        // Création tableau vide 'products'
-        products = [];
-        for (let i in panier) {
-            // Ajouter l'id enregistré dans le localStorage
-            products.push(panier[i].id);          
-        }
-            
-        // valeurs des champs du formulaire
-        const contact = {
-            firstName: prenom.value,
-            lastName: nom.value,
-            address: adresse.value,
-            city: ville.value,
-            email: email.value
-        };
            
 
         // Appel à api avec method post
