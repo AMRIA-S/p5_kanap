@@ -18,15 +18,6 @@ async function afficheArticleDansPanier() {
     let totalQuantite = 0;
     let totalPrix = 0;
 
-    // Trier les canapés par modèle
-    panier.sort(function (a, b) {
-        var idA = a.id.toUpperCase();
-        var idB = b.id.toUpperCase();
-        if (idA < idB) {
-            return -1;
-        }
-    });
-
     // Boucle sur le panier (localStorage)
     for (let i in panier) {
 
@@ -62,6 +53,14 @@ async function afficheArticleDansPanier() {
         const displayItems = parse.parseFromString(product, "text/html");
         kanap.appendChild(displayItems.body.firstChild);
     
+        // Trier les canapés par modèle
+    panier.sort(function (a, b) {
+        var idA = a.id.toUpperCase();
+        var idB = b.id.toUpperCase();
+        if (idA < idB) {
+            return -1;
+        }
+    });
 
         // Création des variables pour l'id et couleur stockés dans le localStorage et du prix de l'API
         const id = panier[i].id;
@@ -247,6 +246,7 @@ document.getElementById('order').addEventListener('click', function(e){
         if ((champEmail.test(email.value) !== false) && (champVille.test(ville.value) !== false) && (champAdresse.test(adresse.value) !== false) && (champNomPrenom.test(nom.value) !== false) && (champNomPrenom.test(prenom.value) !== false)) {
             // Redirection vers la page 'confirmation.html' avec l'orderId en URL
             document.location.href = `../html/confirmation.html?orderId=${orderId}`;
+            //localStorage.clear();
         }
     };
     envoyerFormulaire();
