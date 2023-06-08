@@ -192,7 +192,7 @@ const erreurEmail = document.getElementById('emailErrorMsg');
 const champNomPrenom = /^[A-Za-zà-üÀ-Ü -]+$/;
 const champAdresse = /^[A-Za-zà-üÀ-Ü0-9' -]+$/;
 const champVille = /^[A-Za-zà-üÀ-Ü/ -]+$/;
-const champEmail = /^[A-Za-z0-9-.]*@[a-z]*[.][a-z]+$/;
+const champEmail = /^[A-Za-z0-9-.]+@[a-z]+\.[a-z]+$/;
 
 // Lors du clic sur "Commander"
 document.getElementById('order').addEventListener('click', function(e){
@@ -250,7 +250,7 @@ document.getElementById('order').addEventListener('click', function(e){
         let orderId = JSON.stringify(resultat.orderId);
 
         // Si OrderId n'a pas été définit alors la page confirmation ne s'affichera pas
-        if (orderId !== undefined) {
+        if ((orderId !== undefined) && (champEmail.test(email.value) !== false) && (champVille.test(ville.value) !== false) && (champAdresse.test(adresse.value) !== false) && (champNomPrenom.test(nom.value) !== false) && (champNomPrenom.test(prenom.value) !== false)) {
             // Redirection vers la page 'confirmation.html' avec l'orderId en URL
             document.location.href = `../html/confirmation.html?orderId=${orderId}`;
         }
