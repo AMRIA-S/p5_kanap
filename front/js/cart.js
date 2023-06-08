@@ -244,7 +244,7 @@ document.getElementById('order').addEventListener('click', function(e){
         let orderId = JSON.stringify(resultat.orderId);
 
         // Si OrderId n'a pas été définit alors la page confirmation ne s'affichera pas
-        if ((orderId !== undefined) && (champEmail.test(email.value) !== false) && (champVille.test(ville.value) !== false) && (champAdresse.test(adresse.value) !== false) && (champNomPrenom.test(nom.value) !== false) && (champNomPrenom.test(prenom.value) !== false)) {
+        if ((champEmail.test(email.value) !== false) && (champVille.test(ville.value) !== false) && (champAdresse.test(adresse.value) !== false) && (champNomPrenom.test(nom.value) !== false) && (champNomPrenom.test(prenom.value) !== false)) {
             // Redirection vers la page 'confirmation.html' avec l'orderId en URL
             document.location.href = `../html/confirmation.html?orderId=${orderId}`;
         }
