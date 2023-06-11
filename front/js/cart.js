@@ -4,8 +4,6 @@ async function afficheArticleDansPanier() {
     // Récupérer le panier du client enregistré dans localStorage
     let panier = JSON.parse(localStorage.getItem("panier")); 
 
-    
-
     // Utilise le DOMParser pour créer les éléments dans l'id de cart__items du HTML
     const parse = new DOMParser();
     const kanap = document.querySelector('#cart__items');
@@ -52,16 +50,7 @@ async function afficheArticleDansPanier() {
         // Les afficher
         const displayItems = parse.parseFromString(product, "text/html");
         kanap.appendChild(displayItems.body.firstChild);
-    
-        // Trier les canapés par modèle
-    panier.sort(function (a, b) {
-        var idA = a.id.toUpperCase();
-        var idB = b.id.toUpperCase();
-        if (idA < idB) {
-            return -1;
-        }
-    });
-
+        
         // Création des variables pour l'id et couleur stockés dans le localStorage et du prix de l'API
         const id = panier[i].id;
         const color = panier[i].color;
@@ -152,7 +141,7 @@ async function afficheArticleDansPanier() {
             document.querySelector('#totalPrice').innerHTML= newTotalPrix;            
         });
     };
-    
+
     // Afficher texte "Votre panier est vide" si il n'y a pas d'article
     if (totalQuantite == 0) {
         messagePanierVide.innerText = "Votre panier est vide";
@@ -185,69 +174,76 @@ const erreurEmail = document.getElementById('emailErrorMsg');
 const champNomPrenom = /^[A-Za-zà-üÀ-Ü -]+$/;
 const champAdresse = /^[A-Za-zà-üÀ-Ü0-9' -]+$/;
 const champVille = /^[A-Za-zà-üÀ-Ü/ -]+$/;
-const champEmail = /^[A-Za-z0-9-.]+@[a-z]+\.[a-z]+$/;
+const champEmail = /^[A-Za-z0-9-._]+@[a-z]+\.[a-z]+$/;
+
+// Création d'une fonction type
+function isChampValide (e, champs, valeur, erreurValeur, msgerreur) {
+    e.preventDefault();
+       if (champs.test(valeur.value) === false) {
+           erreurValeur.textContent = msgerreur;
+           return false;
+       }else {
+           erreurValeur.textContent = "";
+           return true;
+       };
+   };
 
 // Lors du clic sur "Commander"
 document.getElementById('order').addEventListener('click', function(e){
 
-    // Création d'une fonction type
-    function champInvalide (e, champs, valeur, erreurValeur, msgerreur) {
-     e.preventDefault();
-        if (champs.test(valeur.value) === false) {
-            erreurValeur.textContent = msgerreur;
-        }else {
-            erreurValeur.textContent = "";
-        };
-    };
-
     // Réutilisation de cette fonction en incrémentant l'input, id et la variable
-    champInvalide (e, champNomPrenom, nom, erreurNom, "Ce champ doit contenir uniquement des lettres en MAJUSCULES, minuscules ou avec Accents !");
-    champInvalide (e, champNomPrenom, prenom, erreurPrenom, "Ce champ doit contenir uniquement des lettres en MAJUSCULES, minuscules ou avec Accents !");
-    champInvalide (e, champAdresse, adresse, erreurAdresse, "Ce champ doit contenir uniquement des chiffres et des lettres !");
-    champInvalide (e, champVille, ville, erreurVille, "Ce champ ne peut pas contenir un nombre et des caractères spéciaux exeptés / et -");
-    champInvalide (e, champEmail, email, erreurEmail, "Ce champ doit contenir une adresse mail valide ! Exemple: nom.prenom@gmail.com ou surnom@gmail.com");
+    const isNom = isChampValide (e, champNomPrenom, nom, erreurNom, "Ce champ doit contenir uniquement des lettres en MAJUSCULES, minuscules ou avec Accents !");
+    const isPrenom = isChampValide (e, champNomPrenom, prenom, erreurPrenom, "Ce champ doit contenir uniquement des lettres en MAJUSCULES, minuscules ou avec Accents !");
+    const isAdresse = isChampValide (e, champAdresse, adresse, erreurAdresse, "Ce champ doit contenir uniquement des chiffres et des lettres !");
+    const isVille = isChampValide (e, champVille, ville, erreurVille, "Ce champ ne peut pas contenir un nombre et des caractères spéciaux exeptés / et -");
+    const isEmail = isChampValide (e, champEmail, email, erreurEmail, "Ce champ doit contenir une adresse mail valide ! Exemple: nom.prenom@gmail.com ou surnom@gmail.com");
 
 
     // Récupérer le panier du client enregistré dans localStorage
     let panier = JSON.parse(localStorage.getItem("panier"));
 
-    // Création tableau vide 'products'
-    products = [];
-    for (let i in panier) {
-        // Ajouter l'id enregistré dans le localStorage
-        products.push(panier[i].id);          
-    }
-        
-    // valeurs des champs du formulaire
-    const contact = {
-        firstName: prenom.value,
-        lastName: nom.value,
-        address: adresse.value,
-        city: ville.value,
-        email: email.value
-    };
-    
-    async function envoyerFormulaire() {
-           
-
-        // Appel à api avec method post
-        const reponse = await fetch("http://localhost:3000/api/products/order", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({contact, products})
-        })
-        // Récupérer la réponse de l'API
-        const resultat = await reponse.json();
-
-        // Récupération de l'orderId
-        let orderId = JSON.stringify(resultat.orderId);
-
-        // Si OrderId n'a pas été définit alors la page confirmation ne s'affichera pas
-        if ((champEmail.test(email.value) !== false) && (champVille.test(ville.value) !== false) && (champAdresse.test(adresse.value) !== false) && (champNomPrenom.test(nom.value) !== false) && (champNomPrenom.test(prenom.value) !== false)) {
-            // Redirection vers la page 'confirmation.html' avec l'orderId en URL
-            document.location.href = `../html/confirmation.html?orderId=${orderId}`;
-            //localStorage.clear();
+   
+        // Création tableau vide 'products'
+        products = [];
+        for (let i in panier) {
+            // Ajouter l'id enregistré dans le localStorage
+            products.push(panier[i].id);          
         }
-    };
-    envoyerFormulaire();
+                
+        // valeurs des champs du formulaire
+        const contact = {
+            firstName: prenom.value,
+            lastName: nom.value,
+            address: adresse.value,
+            city: ville.value,
+            email: email.value
+        };
+    
+    
+    
+    async function envoyerFormulaire(contact, products) {
+           
+        if (isNom === true && isPrenom === true && isAdresse === true && isVille === true && isEmail === true){
+            // Appel à api avec method post
+            const reponse = await fetch("http://localhost:3000/api/products/order", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({contact, products})
+            })
+
+            // Récupérer la réponse de l'API
+            const resultat = await reponse.json();
+
+            // Récupération de l'orderId
+            const orderId = JSON.stringify(resultat.orderId);
+
+            //Si OrderId n'a pas été définit alors la page confirmation ne s'affichera pas
+            if (reponse.ok) {
+                //Redirection vers la page 'confirmation.html' avec l'orderId en URL
+                document.location.href = `../html/confirmation.html?orderId=${orderId}`;
+                localStorage.clear();
+            }
+        
+    }}
+    envoyerFormulaire(contact, products);
 });
