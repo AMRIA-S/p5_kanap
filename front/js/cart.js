@@ -220,9 +220,9 @@ document.getElementById('order').addEventListener('click', function(e){
         };
     
     
-    
     async function envoyerFormulaire(contact, products) {
-           
+        
+        // Verification des champs du formulaire
         if (isNom === true && isPrenom === true && isAdresse === true && isVille === true && isEmail === true){
             // Appel à api avec method post
             const reponse = await fetch("http://localhost:3000/api/products/order", {
