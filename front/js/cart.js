@@ -116,11 +116,16 @@ async function afficheArticleDansPanier() {
             // Récuperer la valeur de l'input et la convertir en Number
             let valeurQuantite = +event.target.value;
 
+            if ((valeurQuantite < 1) || (valeurQuantite > 100)){
+                alert("La quantité doit être comprise entre 1 et 100");
+                return false;
+            }
+
             // Récupérer le panier du client enregistré dans localStorage
             let panier = JSON.parse(localStorage.getItem("panier")); 
 
             // Utilisation de la méthode Find pour comparer l'id et color du localStorage
-            let kanap = panier.find(element => element.color === panier[i].color && element.id === panier[i].id);
+            let kanap = panier.find(element => element.color === articleDansPanier.dataset.color && element.id === articleDansPanier.dataset.id);
             
             // Récupère le prix et la quantité total au départ en le convertissant en Number
             const oldTotalQuantite = +document.querySelector('#totalQuantity').innerHTML;
@@ -221,8 +226,7 @@ document.getElementById('order').addEventListener('click', function(e){
     
     
     async function envoyerFormulaire(contact, products) {
-        
-        // Verification des champs du formulaire
+           
         if (isNom === true && isPrenom === true && isAdresse === true && isVille === true && isEmail === true){
             // Appel à api avec method post
             const reponse = await fetch("http://localhost:3000/api/products/order", {
