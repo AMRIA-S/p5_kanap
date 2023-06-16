@@ -116,8 +116,9 @@ async function afficheArticleDansPanier() {
             // Récuperer la valeur de l'input et la convertir en Number
             let valeurQuantite = +event.target.value;
 
+            // Condition pour vérifier que la quantité saisie est bien comprise entre 1 et 100
             if ((valeurQuantite < 1) || (valeurQuantite > 100)){
-                alert("La quantité doit être comprise entre 1 et 100");
+                alert("La quantité saisie doit être comprise entre 1 et 100");
                 return false;
             }
 
